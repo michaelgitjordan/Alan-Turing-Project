@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Алан Тьюринг и Вторая мировая война</title>
+    <style>
+        /* CSS стили */
+        :root {
+            --beige: #f5f5f0;
+            --dark-blue: #2c3e50;
+            --accent-green: #4a6d5e;
+            --light-gray: #eaeaea;
+            --text-gray: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        body {
+            background-color: var(--beige);
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), 
+                        url('https://upload.wikimedia.org/wikipedia/commons/7/7c/Bletchley_Park_Mansion.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Roboto Slab', serif;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            color: var(--dark-blue);
+            border-bottom: 2px solid var(--accent-green);
+            padding-bottom: 0.5rem;
+            margin: 2rem 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-green);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            margin: 1rem 0.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        nav {
+            background-color: var(--dark-blue);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--light-gray);
+        }
+        
+        section {
+            padding: 3rem 0;
+        }
+        
+        .img-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .img-container img {
+            max-width: 50%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .img-container figcaption {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        footer {
+            background-color: var(--dark-blue);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Алан Тьюринг: Гений, изменивший ход войны</h1>
+            <p>Математик, взломавший "Энигму" и сокративший Вторую мировую войну на годы</p>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#bletchley">Блетчли-Парк</a></li>
+            <li><a href="#enigma">"Энигма"</a></li>
+            <li><a href="map.html">Интерактивная карта</a></li>
+            <li><a href="#legacy">Наследие</a></li>
+            <li><a href="#contribution">Вклад в победу</a></li>
+        </ul>
+    </nav>
+    
+    <section id="about">
+        <div class="container">
+            <h2>Алан Тьюринг и его роль во Второй мировой</h2>
+            <p>Алан Тьюринг (1912-1954) - британский математик, логик и криптограф, чья работа в Блетчли-Парке во время Второй мировой войны сыграла ключевую роль во взломе немецких шифров, в частности знаменитой машины "Энигма".</p>
+            
+            <div class="img-container">
+                <img src="turing.jpg" alt="Алан Тьюринг">
+                <figcaption>Алан Тьюринг в 1951 году</figcaption>
+            </div>
+            
+            <p>Его теоретические работы по информатике и создание концепции универсальной машины Тьюринга заложили основы современных компьютеров. Однако именно его вклад в криптоанализ во время войны остаётся одним из самых значительных, но малоизвестных широкой публике достижений.</p>
+        </div>
+    </section>
+    
+    <section id="bletchley" style="background-color: var(--light-gray);">
+        <div class="container">
+            <h2>Блетчли-Парк: центр британской криптографии</h2>
+            <p>Блетчли-Парк - усадьба в графстве Бакингемшир, которая во время войны стала главным центром британской криптографии. Здесь работала Правительственная школа кодов и шифров (GC&CS), где трудились лучшие математики, лингвисты и шахматисты страны.</p>
+            
+            <div class="img-container">
+                <img src="bletchly.jpg" alt="Блетчли-Парк">
+                <figcaption>Главное здание Блетчли-Парка</figcaption>
+            </div>
+            
+            <p>Тьюринг возглавил группу Hut 8, занимавшуюся расшифровкой сообщений немецкого военно-морского флота. Именно здесь он разработал методы взлома "Энигмы" и создал электромеханическую машину "Bombe", которая автоматизировала процесс дешифровки.</p>
+        </div>
+    </section>
+    
+    <section id="enigma">
+        <div class="container">
+            <h2>Машина "Энигма" и её взлом</h2>
+            <p>"Энигма" - роторная шифровальная машина, использовавшаяся Германией с 1920-х годов. Её считали "неприступной" из-за огромного количества возможных комбинаций - около 159 миллиардов миллиардов.</p>
+            
+            <div class="img-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg/1200px-Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg" alt="Машина Энигма">
+                <figcaption>Оригинальная машина "Энигма" в музее</figcaption>
+            </div>
+            
+            <p>Тьюринг усовершенствовал методы криптоанализа, разработанные польскими математиками, и создал теоретическую базу для систематического взлома "Энигмы". Его ключевым вкладом стало:</p>
+            
+            <ul style="margin: 1rem 0 1rem 2rem;">
+                <li>Разработка статистического метода "банального поиска" (Banburismus)</li>
+                <li>Создание электромеханической машины "Bombe" (1940)</li>
+                <li>Разработка методики использования "проколов" (предсказуемых фраз в сообщениях)</li>
+            </ul>
+        </div>
+    </section>
+    
+    <section id="contribution" style="background-color: var(--light-gray);">
+        <div class="container">
+            <h2>Вклад в победу над нацизмом</h2>
+            <p>По оценкам историков, работа Тьюринга и его коллег в Блетчли-Парке сократила Вторую мировую войну на 2-4 года и спасла миллионы жизней.</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <img src="bombe.jpg" alt="Bombe">
+                    <div class="card-content">
+                        <h3>Машина "Bombe"</h3>
+                        <p>Реконструкция машины "Bombe", созданной по разработкам Тьюринга для взлома "Энигмы". Каждая такая машина могла проверять 20 комбинаций в секунду.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <img src="atlantic2.jpg" alt="...">
+                    <div class="card-content">
+                        <h3>Битва за Атлантику</h3>
+                        <p>Взлом военно-морской "Энигмы" позволил союзникам избежать атак немецких подлодок на конвои с припасами.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <img src="normandy2.jpg" alt="Высадка в Нормандии">
+                    <div class="card-content">
+                        <h3>Операция "Оверлорд"</h3>
+                        <p>Дезинформация немцев о месте высадки союзников стала возможной благодаря контролю над расшифрованными сообщениями.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="legacy">
+        <div class="container">
+            <h2>Научное наследие Тьюринга</h2>
+            <p>После войны Тьюринг продолжил работу в области компьютерных наук. Среди его достижений:</p>
+            
+            <ul style="margin: 1rem 0 1rem 2rem;">
+                <li>Разработка ACE (Automatic Computing Engine) - одного из первых проектов компьютера с хранимой программой</li>
+                <li>Работы по искусственному интеллекту и тест Тьюринга</li>
+                <li>Математическая биология (морфогенез)</li>
+            </ul>
+            
+            <div class="img-container">
+                <img src="statue.jpg" alt="Статуя Тьюринга">
+                <figcaption>Статуя Тьюринга в Блетчли-Парке</figcaption>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>Проект по Истории России (ПГНИУ-2025)</p>
+        </div>
+    </footer>
+</body>
+</html>

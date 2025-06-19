@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Влияние Ultra на Вторую Мировую войну</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Bletchley_Park_Building.jpg/1920px-Bletchley_Park_Building.jpg');
+            background-size: cover;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 10px auto;
+        }
+        #map {
+            height: 600px;
+            border-bottom: 1px solid #ddd;
+        }
+        .event-info {
+            padding: 25px;
+            background-color: #f9f9f9;
+            border-top: 3px solid #2c3e50;
+        }
+        .event-info.hidden {
+            display: none;
+        }
+        .event-title {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .event-content {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .event-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        .event-image {
+            flex: 0 0 300px;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .event-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .legend {
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            line-height: 1.6;
+        }
+        .legend h4 {
+            margin: 0 0 8px 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .legend-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        /* Стиль для скрытия логотипа Украины */
+        .leaflet-attribution-flag {
+            display: none !important;
+        }
+        @media (max-width: 768px) {
+            .event-content {
+                flex-direction: column;
+            }
+            .event-image {
+                flex-basis: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Влияние ULTRA на Вторую Мировую войну</h1>
+            <p class="subtitle">Как расшифровка сообщений "Энигмы" в Блетчли-Парке под руководством Алана Тьюринга изменила ход истории</p>
+        </header>
+        
+        <div id="map"></div>
+        
+        <div id="event-info" class="event-info hidden">
+            <h2 class="event-title" id="event-title">Выберите событие на карте</h2>
+            <div class="event-content">
+                <div class="event-text">
+                    <p id="event-description"></p>
+                    <p id="event-impact"></p>
+                </div>
+                <div class="event-image">
+                    <img id="event-image" src="" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Инициализация карты
+        const map = L.map('map', {
+            // Отключаем атрибуцию Украины
+            attributionControl: false
+        }).setView([50.0, 15.0], 4);
+
+        // Добавление слоя карты БЕЗ украинских элементов
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Добавляем только необходимые элементы управления
+        L.control.attribution({
+            position: 'bottomright',
+            prefix: '<a href="https://leafletjs.com" title="A JavaScript library for interactive maps">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Создание пользовательских иконок
+        const iconColors = {
+            naval: '#3498db',
+            land: '#e74c3c',
+            air: '#2ecc71',
+            intelligence: '#9b59b6'
+        };
+
+        // Данные о событиях с координатами и информацией
+        const events = [
+            {
+                id: 'atlantic',
+                title: 'Битва за Атлантику',
+                coords: [45.0, -25.0],
+                type: 'naval',
+                description: 'С 1941 года расшифровка сообщений подводных лодок (ключевой шифр «Тритон») позволила конвоям союзников избегать «волчьих стай».',
+                impact: 'Снижение потерь торговых судов с 25% до менее 1% к 1944 году. Сохранение жизненно важных морских путей снабжения.',
+                image: 'atlantic.jpg'
+            },
+            {
+                id: 'north-africa',
+                title: 'Североафриканская кампания',
+                coords: [30.8333, 28.9167],
+                type: 'land',
+                description: 'Расшифровка сообщений Африканского корпуса Роммеля предоставляла данные о передвижениях войск, запасах топлива и боеприпасов.',
+                impact: 'Победа при Эль-Аламейне (1942 г.). Успешное планирование операции «Факел» по высадке в Северной Африке.',
+                image: 'egypt.jpg'
+            },
+            {
+                id: 'd-day',
+                title: 'Высадка в Нормандии',
+                coords: [49.4144, -0.8322],
+                type: 'land',
+                description: 'ULTRA подтвердила, что немцы ожидали высадку в Па-де-Кале, а не в Нормандии. Также отслеживались передвижения резервных дивизий.',
+                impact: 'Успех операции «Оверлорд». Немцы не смогли перебросить подкрепления к месту высадки в критические первые дни.',
+                image: 'normandy.jpg'
+            },
+            {
+                id: 'bombing',
+                title: 'Бомбардировочная кампания',
+                coords: [51.5074, 0.0],
+                type: 'air',
+                description: 'Расшифровка сообщений Люфтваффе помогала оценивать эффективность бомбардировок и состояние немецкой авиапромышленности.',
+                impact: 'Оптимизация стратегии бомбардировок. Избежание ловушек ПВО. Подтверждение разрушения ключевых заводов.',
+                image: 'bomb.jpg'
+            },
+            {
+                id: 'kursk',
+                title: 'Курская битва',
+                coords: [51.7303, 36.1926],
+                type: 'intelligence',
+                description: 'Хотя основной вклад внесла советская разведка, перехваты ULTRA о планах операции «Цитадель» были переданы СССР.',
+                impact: 'Подтверждение данных о немецком наступлении. Помощь в подготовке глубокоэшелонированной обороны.',
+                image: 'kursk.jpg'
+            },
+            {
+                id: 'crete',
+                title: 'Битва за Крит',
+                coords: [35.3080, 25.0880],
+                type: 'intelligence',
+                description: 'Хотя ULTRA предупредила о планах вторжения, союзники не смогли должным образом подготовиться к обороне.',
+                impact: 'Несмотря на поражение, информация о потерях немецких десантников заставила Гитлера отказаться от крупных воздушно-десантных операций.',
+                image: 'crete.jpg'
+            }
+        ];
+
+        // Создание легенды
+        const legend = L.control({ position: 'bottomright' });
+        legend.onAdd = function(map) {
+            const div = L.DomUtil.create('div', 'legend');
+            div.innerHTML = `
+                <h4>Легенда карты</h4>
+                <div class="legend-item"><div class="legend-icon" style="background:${iconColors.naval}"></div> Морские операции</div>
+                <div class="legend-item"><div class="legend-icon" style="background:${iconColors.land}"></div> Сухопутные операции</div>
+                <div class="legend-item"><div class="legend-icon" style="background:${iconColors.air}"></div> Воздушные операции</div>
+                <div class="legend-item"><div class="legend-icon" style="background:${iconColors.intelligence}"></div> Разведывательные данные</div>
+            `;
+            return div;
+        };
+        legend.addTo(map);
+
+        // Добавление событий на карту
+        events.forEach(event => {
+            const marker = L.circleMarker(event.coords, {
+                radius: 10,
+                fillColor: iconColors[event.type],
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map);
+            
+            marker.bindPopup(`<b>${event.title}</b><br>${event.description.substring(0, 100)}...`);
+            
+            marker.on('click', function() {
+                // Обновление информации о событии
+                document.getElementById('event-title').textContent = event.title;
+                document.getElementById('event-description').textContent = event.description;
+                document.getElementById('event-impact').innerHTML = `<strong>Влияние ULTRA:</strong> ${event.impact}`;
+                document.getElementById('event-image').src = event.image;
+                document.getElementById('event-image').alt = event.title;
+                
+                // Показываем панель информации
+                document.getElementById('event-info').classList.remove('hidden');
+                
+                // Центрируем карту на событии
+                map.setView(event.coords, 6);
+            });
+        });
+
+        // Добавление информационного маркера для Блетчли-Парка
+        const bletchleyMarker = L.marker([51.9977, -0.7407]).addTo(map);
+        bletchleyMarker.bindPopup(`
+            <b>Блетчли-Парк</b><br>
+            Центр расшифровки союзников, где под руководством Алана Тьюринга
+            работали над взломом шифра "Энигма". Здесь создавались и эксплуатировались
+            дешифровальные машины "Бомба".
+        `);
+        
+        // Добавление линии от Блетчли к событиям
+        events.forEach(event => {
+            const line = L.polyline([
+                [51.9977, -0.7407],
+                event.coords
+            ], {
+                color: '#7f8c8d',
+                weight: 1,
+                dashArray: '5, 10',
+                opacity: 0.5
+            }).addTo(map);
+        });
+    </script>
+</body>
+</html>
